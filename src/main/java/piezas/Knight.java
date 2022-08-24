@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class Knight
     extends ChessGamePiece {
-    protected Map<Integer, String> icons_map;
+    protected Map<Integer, String> iconsMap;
     /**
      * piesas.Knight constructor for gamePiece
      *
@@ -105,10 +105,10 @@ public class Knight
      */
     @Override
     public ImageIcon createImageByPieceType(){
-        icons_map = new HashMap<Integer, String>();
-        icons_map.put(-1, "../chessImages/default-Unassigned.gif");
-        icons_map.put(ChessGamePiece.BLACK, "../chessImages/BlackKnight.gif");
-        icons_map.put(ChessGamePiece.WHITE, "../chessImages/WhiteKnight.gif");
-        return new ImageIcon(getClass().getResource(this.icons_map.get(getColorOfPiece())));
+        iconsMap = new HashMap<>();
+        iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
+        iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackKnight.gif");
+        iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhiteKnight.gif");
+        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class Pawn
     extends ChessGamePiece {
-    protected Map<Integer, String> icons_map;
+    protected Map<Integer, String> iconsMap;
     private boolean notMoved;
     // ----------------------------------------------------------
     /**
@@ -132,10 +132,10 @@ public class Pawn
      */
     @Override
     public ImageIcon createImageByPieceType(){
-        icons_map = new HashMap<Integer, String>();
-        icons_map.put(-1, "../chessImages/default-Unassigned.gif");
-        icons_map.put(ChessGamePiece.BLACK, "../chessImages/BlackPawn.gif");
-        icons_map.put(ChessGamePiece.WHITE, "../chessImages/WhitePawn.gif");
-        return new ImageIcon(getClass().getResource(this.icons_map.get(getColorOfPiece())));
+        iconsMap = new HashMap<>();
+        iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
+        iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackPawn.gif");
+        iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhitePawn.gif");
+        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
     }
 }

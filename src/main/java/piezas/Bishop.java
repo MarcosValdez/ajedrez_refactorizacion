@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
  * @version 2010.11.17
  */
 public class Bishop extends ChessGamePiece {
-	protected Map<Integer, String> icons_map;
+	protected Map<Integer, String> iconsMap;
 	/**
 	 * Creates a new piesas.Bishop object.
 	 * 
@@ -61,10 +61,10 @@ public class Bishop extends ChessGamePiece {
 	 */
 	@Override
 	public ImageIcon createImageByPieceType(){
-		icons_map = new HashMap<Integer, String>();
-		icons_map.put(-1, "../chessImages/default-Unassigned.gif");
-		icons_map.put(ChessGamePiece.BLACK, "../chessImages/BlackBishop.gif");
-		icons_map.put(ChessGamePiece.WHITE, "../chessImages/WhiteBishop.gif");
-		return new ImageIcon(getClass().getResource(this.icons_map.get(getColorOfPiece())));
+		iconsMap = new HashMap<>();
+		iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
+		iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackBishop.gif");
+		iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhiteBishop.gif");
+		return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
 	}
 }

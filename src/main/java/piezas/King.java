@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class King
     extends ChessGamePiece {
-    protected Map<Integer, String> icons_map;
+    protected Map<Integer, String> iconsMap;
     // ----------------------------------------------------------
     /**
      * Create a new piesas.King object.
@@ -45,25 +45,10 @@ public class King
      */
     @Override
     protected ArrayList<String> calculatePossibleMoves( ChessGameBoard board ){
-        ArrayList<String> northEastMoves = calculateNorthEastMoves( board, 1 );
-        ArrayList<String> northWestMoves = calculateNorthWestMoves( board, 1 );
-        ArrayList<String> southEastMoves = calculateSouthEastMoves( board, 1 );
-        ArrayList<String> southWestMoves = calculateSouthWestMoves( board, 1 );
-        ArrayList<String> northMoves = calculateNorthMoves( board, 1 );
-        ArrayList<String> southMoves = calculateSouthMoves( board, 1 );
-        ArrayList<String> eastMoves = calculateEastMoves( board, 1 );
-        ArrayList<String> westMoves = calculateWestMoves( board, 1 );
-        ArrayList<String> allMoves = new ArrayList<String>();
-        allMoves.addAll( northEastMoves );
-        allMoves.addAll( northWestMoves );
-        allMoves.addAll( southWestMoves );
-        allMoves.addAll( southEastMoves );
-        allMoves.addAll( northMoves );
-        allMoves.addAll( southMoves );
-        allMoves.addAll( westMoves );
-        allMoves.addAll( eastMoves );
-        return allMoves;
+
+        return movesQueenKing(board,1);
     }
+
     /**
      * Determines if this piesas.King is checked.
      *
@@ -81,10 +66,10 @@ public class King
      */
     @Override
     public ImageIcon createImageByPieceType(){
-        icons_map = new HashMap<Integer, String>();
-        icons_map.put(-1, "../chessImages/default-Unassigned.gif");
-        icons_map.put(ChessGamePiece.BLACK, "../chessImages/BlackKing.gif");
-        icons_map.put(ChessGamePiece.WHITE, "../chessImages/WhiteKing.gif");
-        return new ImageIcon(getClass().getResource(this.icons_map.get(getColorOfPiece())));
+        iconsMap = new HashMap<>();
+        iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
+        iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackKing.gif");
+        iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhiteKing.gif");
+        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
     }
 }
