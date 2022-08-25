@@ -20,7 +20,6 @@ import java.util.Map;
  */
 public class Pawn
     extends ChessGamePiece {
-    protected Map<Integer, String> iconsMap;
     private boolean notMoved;
     // ----------------------------------------------------------
     /**
@@ -68,6 +67,53 @@ public class Pawn
         }
         return false;
     }
+    int currentRow (int row){
+        return (getColorOfPiece() == ChessGamePiece.WHITE ? (row - 1) : (row + 1));
+    }
+
+    String movimiento(String combination){
+        String movimientos = null;
+        switch (combination) {
+            case "-1 -1":
+                movimientos = ((pieceRow - 1) + "," + (pieceColumn - 1)); break;
+            case "-1 +1":
+                movimientos = ((pieceRow - 1) + "," + (pieceColumn + 1)); break;
+            case "+1 -1":
+                movimientos = ((pieceRow + 1) + "," + (pieceColumn - 1)); break;
+            default:
+                movimientos = ((pieceRow + 1) + "," + (pieceColumn + 1)); break;
+        }
+        return movimientos;
+    }
+
+    /**
+     * Calculates the possible moves for this piece. These are ALL the possible
+     * moves, including illegal (but at the same time valid) moves.
+     *
+     * @param board the game board to calculate moves on
+     * @return ArrayList<String> the moves
+     */
+    void checkEnemyCapture(ChessGameBoard board, ArrayList<String> movimiento){
+        if (getColorOfPiece() == ChessGamePiece.WHITE) {
+            if (isEnemy(board, pieceRow - 1, pieceColumn - 1)) {
+                String movement = movimiento("-1 -1");
+                movimiento.add(movement);
+            }
+            if (isEnemy(board, pieceRow - 1, pieceColumn + 1)) {
+                String movement = movimiento("-1 +1");
+                movimiento.add(movement);
+            }
+        } else {
+            if (isEnemy(board, pieceRow + 1, pieceColumn - 1)) {
+                String movement = movimiento("+1 -1");
+                movimiento.add(movement);
+            }
+            if (isEnemy(board, pieceRow + 1, pieceColumn + 1)) {
+                String movement = movimiento("+1");
+                movimiento.add(movement);
+            }
+        }
+    }
     /**
      * Calculates the possible moves for this piece. These are ALL the possible
      * moves, including illegal (but at the same time valid) moves.
@@ -78,53 +124,27 @@ public class Pawn
      */
     @Override
     protected ArrayList<String> calculatePossibleMoves( ChessGameBoard board ){
-        ArrayList<String> moves = new ArrayList<String>();
-        if ( isPieceOnScreen() ){
-            int currRow =
-                getColorOfPiece() == ChessGamePiece.WHITE
-                    ? ( pieceRow - 1 )
-                    : ( pieceRow + 1 );
+        ArrayList<String> moves = new ArrayList<>();
+        if (isPieceOnScreen()) {
+            int currRow = currentRow(pieceRow);
             int count = 1;
             int maxIter = notMoved ? 2 : 1;
             // check for normal moves
-            while ( count <= maxIter ){ // only loop while we have open slots and have not passed our
-              // limit
-                if ( isOnScreen( currRow, pieceColumn )
-                    && board.getCell( currRow,
-                        pieceColumn ).getPieceOnSquare() == null ){
-                    moves.add( currRow + "," + pieceColumn );
-                }
-                else
-                {
+            while (count <= maxIter) { // only loop while we have open slots and have not passed our limit
+                if (isOnScreen(currRow, pieceColumn) && board.getCell(currRow, pieceColumn).getPieceOnSquare() == null) {
+                    moves.add(currRow + "," + pieceColumn);
+                } else {
                     break;
                 }
-                currRow =
-                    ( getColorOfPiece() == ChessGamePiece.WHITE )
-                        ? ( currRow - 1 )
-                        : ( currRow + 1 );
+                currRow = currentRow(currRow);
                 count++;
             }
             // check for enemy capture points
-            if ( getColorOfPiece() == ChessGamePiece.WHITE ){
-                if ( isEnemy( board, pieceRow - 1, pieceColumn - 1 ) ){
-                    moves.add( ( pieceRow - 1 ) + "," + ( pieceColumn - 1 ) );
-                }
-                if ( isEnemy( board, pieceRow - 1, pieceColumn + 1 ) ){
-                    moves.add( ( pieceRow - 1 ) + "," + ( pieceColumn + 1 ) );
-                }
-            }
-            else
-            {
-                if ( isEnemy( board, pieceRow + 1, pieceColumn - 1 ) ){
-                    moves.add( ( pieceRow + 1 ) + "," + ( pieceColumn - 1 ) );
-                }
-                if ( isEnemy( board, pieceRow + 1, pieceColumn + 1 ) ){
-                    moves.add( ( pieceRow + 1 ) + "," + ( pieceColumn + 1 ) );
-                }
-            }
+            checkEnemyCapture(board, moves);
         }
         return moves;
     }
+
     /**
      * Creates an icon for this piece depending on the piece's color.
      *
@@ -132,10 +152,11 @@ public class Pawn
      */
     @Override
     public ImageIcon createImageByPieceType(){
+        Map<Integer, String> iconsMap;
         iconsMap = new HashMap<>();
         iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
         iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackPawn.gif");
         iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhitePawn.gif");
-        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
+        return new ImageIcon(getClass().getResource(iconsMap.get(getColorOfPiece())));
     }
 }

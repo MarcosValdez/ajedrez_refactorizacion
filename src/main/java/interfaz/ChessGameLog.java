@@ -23,8 +23,8 @@ public class ChessGameLog
     public ChessGameLog(){
         super(
             new JTextArea( "", 5, 30 ),
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
+            22,
+            32 );
         textArea = ( (JTextArea)this.getViewport().getView() );
     }
     // ----------------------------------------------------------

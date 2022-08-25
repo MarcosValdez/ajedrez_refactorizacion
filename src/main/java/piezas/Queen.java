@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-// import java.awt.Color;
 // -------------------------------------------------------------------------
 /**
  * Represents a piesas.Queen game piece.
@@ -19,7 +18,6 @@ import java.util.Map;
  */
 public class Queen
     extends ChessGamePiece {
-    protected Map<Integer, String> iconsMap;
     // ----------------------------------------------------------
     /**
      * Create a new piesas.Queen object.
@@ -53,10 +51,11 @@ public class Queen
      */
     @Override
     public ImageIcon createImageByPieceType(){
+        Map<Integer, String> iconsMap;
         iconsMap = new HashMap<>();
         iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
         iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackQueen.gif");
         iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhiteQueen.gif");
-        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
+        return new ImageIcon(getClass().getResource(iconsMap.get(getColorOfPiece())));
     }
 }

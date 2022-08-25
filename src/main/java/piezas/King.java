@@ -18,7 +18,6 @@ import java.util.Map;
  */
 public class King
     extends ChessGamePiece {
-    protected Map<Integer, String> iconsMap;
     // ----------------------------------------------------------
     /**
      * Create a new piesas.King object.
@@ -57,7 +56,7 @@ public class King
      * @return true if checked, false if not checked
      */
     public boolean isChecked( ChessGameBoard board ){
-        return getCurrentAttackers( board ).size() > 0;
+        return !getCurrentAttackers( board ).isEmpty();
     }
     /**
      * Creates an icon for this piece depending on the piece's color.
@@ -66,10 +65,11 @@ public class King
      */
     @Override
     public ImageIcon createImageByPieceType(){
+        Map<Integer, String> iconsMap;
         iconsMap = new HashMap<>();
         iconsMap.put(-1, "../chessImages/default-Unassigned.gif");
         iconsMap.put(ChessGamePiece.BLACK, "../chessImages/BlackKing.gif");
         iconsMap.put(ChessGamePiece.WHITE, "../chessImages/WhiteKing.gif");
-        return new ImageIcon(getClass().getResource(this.iconsMap.get(getColorOfPiece())));
+        return new ImageIcon(getClass().getResource(iconsMap.get(getColorOfPiece())));
     }
 }

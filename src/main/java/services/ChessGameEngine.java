@@ -5,10 +5,11 @@ import interfaz.ChessGameBoard;
 import interfaz.ChessPanel;
 import piezas.King;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import java.awt.event.MouseEvent;
+import java.util.List;
 // -------------------------------------------------------------------------
 /**
  * This is the backend behind the Chess game. Handles the turn-based aspects of
@@ -19,7 +20,7 @@ import java.awt.event.MouseEvent;
  * @author Danielle Bushrow (dbushrow)
  * @version 2010.11.17
  */
-public class ChessGameEngine{
+public class ChessGameEngine implements Serializable {
     private ChessGamePiece currentPiece;
     private boolean        firstClick;
     private int            currentPlayer;
@@ -90,7 +91,7 @@ public class ChessGameEngine{
      * @return boolean true if the player does have legal moves, false otherwise
      */
     public boolean playerHasLegalMoves( int playerNum ){
-        ArrayList<ChessGamePiece> pieces;
+        List<ChessGamePiece> pieces;
         if ( playerNum == 1 ){
             pieces = board.getAllWhitePieces();
         }
@@ -114,25 +115,19 @@ public class ChessGameEngine{
      * @return boolean true if the piece is valid, false otherwise
      */
     private boolean selectedPieceIsValid(){
-        if ( currentPiece == null ) // user tried to select an empty square
-        {
-            return false;
+        boolean isValid=false;
+        if ( currentPiece == null ) {
+            return isValid;
         }
-        if ( currentPlayer == 2 ) // black player
-        {
-            if ( currentPiece.getColorOfPiece() == ChessGamePiece.BLACK ){
-                return true;
-            }
-            return false;
+        if ( currentPlayer == 2 && currentPiece.getColorOfPiece() == ChessGamePiece.BLACK) {
+            isValid=true;
         }
-        else
-        // white player
-        {
-            if ( currentPiece.getColorOfPiece() == ChessGamePiece.WHITE ){
-                return true;
-            }
-            return false;
+        if ( currentPlayer != 2 && currentPiece.getColorOfPiece() == ChessGamePiece.WHITE) {
+            isValid=true;
         }
+
+        return isValid;
+
     }
     /**
      * Determines if the requested piesas.King is in check.
@@ -174,7 +169,6 @@ public class ChessGameEngine{
         else
         {
             board.resetBoard( false );
-            // System.exit(0);
         }
     }
     /**
@@ -258,62 +252,44 @@ public class ChessGameEngine{
                 currentPiece.showLegalMoves( board );
                 squareClicked.setBackground( Color.GREEN );
                 firstClick = false;
+            } else {
+                if ( currentPiece != null ){mensajeAdvetencia("Pieza No Null", squareClicked, 0, 0);}
+                else {mensajeAdvetencia("Pieza Nul", squareClicked, 0, 0);}
             }
-            else
-            {
-                if ( currentPiece != null ){
-                    JOptionPane.showMessageDialog(
-                        squareClicked,
-                        "You tried to pick up the other player's piece! "
-                            + "Get some glasses and pick a valid square.",
-                        "Illegal move",
-                        JOptionPane.ERROR_MESSAGE );
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(
-                        squareClicked,
-                        "You tried to pick up an empty square! "
-                            + "Get some glasses and pick a valid square.",
-                        "Illegal move",
-                        JOptionPane.ERROR_MESSAGE );
-                }
-            }
-        }
-        else
-        {
-            if ( pieceOnSquare == null ||
-                !pieceOnSquare.equals( currentPiece ) ) // moving
-            {
-                boolean moveSuccessful =
-                    currentPiece.move(
-                        board,
-                        squareClicked.getRow(),
-                        squareClicked.getColumn() );
-                if ( moveSuccessful ){
-                    checkGameConditions();
-                }
-                else
-                {
+        } else {
+            if ( movimientoPieza(pieceOnSquare, currentPiece) ) {
+                boolean moveSuccessful = currentPiece.move(board, squareClicked.getRow(), squareClicked.getColumn() );
+                if ( moveSuccessful ){checkGameConditions();}
+                else {
                     int row = squareClicked.getRow();
                     int col = squareClicked.getColumn();
-                    JOptionPane.showMessageDialog(
-                        squareClicked,
-                        "The move to row " + ( row + 1 ) + " and column "
-                            + ( col + 1 )
-                            + " is either not valid or not legal "
-                            + "for this piece. Choose another move location, "
-                            + "and try using your brain this time!",
-                        "Invalid move",
-                        JOptionPane.ERROR_MESSAGE );
+                    mensajeAdvetencia("mensaje por defecto", squareClicked, row, col);
                 }
-                firstClick = true;
             }
-            else
-            // user is just unselecting the current piece
-            {
-                firstClick = true;
-            }
+            firstClick = true;
+        }
+    }
+    public boolean movimientoPieza(ChessGamePiece pieceOnSquare,ChessGamePiece currentPiece){
+        return pieceOnSquare == null || !pieceOnSquare.equals(currentPiece);
+    }
+    public void mensajeAdvetencia(String nulo, BoardSquare squareClicked , int row, int col){
+        switch (nulo) {
+            case "Pieza No Null":
+                JOptionPane.showMessageDialog(
+                        squareClicked, "You tried to pick up the other player's piece! " + "Get some glasses and pick a valid square.",  "Illegal move",
+                        JOptionPane.ERROR_MESSAGE );
+                break;
+            case "Pieza Null":
+                JOptionPane.showMessageDialog(
+                        squareClicked, "You tried to pick up an empty square! " + "Get some glasses and pick a valid square.", "Illegal move",
+                        JOptionPane.ERROR_MESSAGE );
+                break;
+            default:
+                JOptionPane.showMessageDialog(
+                        squareClicked, "The move to row " + ( row + 1 ) + " and column " + ( col + 1 ) + " is either not valid or not legal "
+                                + "for this piece. Choose another move location, " + "and try using your brain this time!", "Invalid move",
+                        JOptionPane.ERROR_MESSAGE );
+                break;
         }
     }
 }
